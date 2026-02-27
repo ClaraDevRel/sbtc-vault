@@ -1,0 +1,16 @@
+{
+  "title": "Counter App",
+  "description": "A simple counter app demonstrating Clarity smart contract development with a Next.js frontend.",
+  "type": "dapp",
+  "framework": "Clarity, Next.js, React.js",
+  "useCase": "Learning",
+  "complexity": "Beginner",
+  "tags": [
+    "counter",
+    "web3",
+    "smart-contract",
+    "stacks",
+    "clarity",
+    "next.js"
+  ]
+}

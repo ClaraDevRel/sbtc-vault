@@ -1,0 +1,8 @@
+{
+  "name": "stacks-starter",
+  "private": true,
+  "workspaces": [
+    "clarity",
+    "front-end"
+  ]
+}
