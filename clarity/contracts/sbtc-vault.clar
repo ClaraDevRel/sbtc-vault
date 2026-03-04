@@ -39,7 +39,7 @@
 
     ;; Transfer sBTC from user to contract
     ;; Note: contract-call? requires literal contract identifier, not a constant
-    (try! (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount tx-sender current-contract none))
+    (try! (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount tx-sender (as-contract tx-sender) none))
 
     ;; Update user's deposit balance
     (map-set deposits tx-sender (+ (get-balance tx-sender) amount))
@@ -49,6 +49,28 @@
 
     ;; Update total deposits
     (var-set total-deposits (+ (var-get total-deposits) amount))
+
+    (ok amount)
+  )
+)
+
+(define-public (withdraw (amount uint) (recipient principal))
+  (begin
+    ;; Only contract owner can withdraw
+    (asserts! (is-eq tx-sender contract-owner) err-owner-only)
+    (asserts! (> amount u0) err-zero-amount)
+
+    ;; Ensure recipient has sufficient vault balance
+    (asserts! (>= (get-balance recipient) amount) err-insufficient-balance)
+
+    ;; Transfer sBTC from contract to recipient
+    (try! (as-contract (contract-call? 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token transfer amount tx-sender recipient none)))
+
+    ;; Update recipient's deposit balance
+    (map-set deposits recipient (- (get-balance recipient) amount))
+
+    ;; Update total deposits
+    (var-set total-deposits (- (var-get total-deposits) amount))
 
     (ok amount)
   )
