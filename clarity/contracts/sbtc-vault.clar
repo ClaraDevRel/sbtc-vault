@@ -54,10 +54,10 @@
   )
 )
 
-(define-public (get-user-info (account principal))
-  (ok {
+(define-read-only (get-user-info (account principal))
+  {
     balance: (get-balance account),
     deposit-block: (get-deposit-block account),
     total-deposits: (var-get total-deposits)
-  })
+  }
 )
